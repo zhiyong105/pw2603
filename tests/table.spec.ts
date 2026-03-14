@@ -27,7 +27,7 @@ import { test, expect } from '@playwright/test';
     
 // });
 
-test('verify fullname of max due person', async ({page}) =>{
+test('verify fullname of min due person', async ({page}) =>{
 
     await page.goto('https://the-internet.herokuapp.com/tables');
 
@@ -41,20 +41,22 @@ test('verify fullname of max due person', async ({page}) =>{
     // const maxDueValue = Math.max(...dueAmounts.map(amount => parseFloat(amount.replace('$', ''))));
     // const maxDueIndex = dueAmounts.indexOf('$' + maxDueValue.toFixed(2));
     const numericValues = dueAmounts.map(a => parseFloat(a.replace('$', '')));
-    const maxDueValue = 50.00;
+    const minDueValue = Math.min(...dueAmounts.map(amount => parseFloat(amount.replace('$', ''))));
     const allMaxIndices = numericValues.reduce((indices, val, index) => {
-    if (val === maxDueValue) {
+    if (val === minDueValue) {
         indices.push(index);
     }
     return indices;
     }, [] as number[]);
     // console.log(maxDueIndex);
-    const fullnames = ['John Smith', 'Tim Conway'];
+    const fullnames = ['John Smith','Tim Conway'];
     for (let index = 0; index < allMaxIndices.length; index++) {
         const element = allMaxIndices[index];
         const firstName = await page.locator(`#table1 tbody tr:nth-child(${element + 1}) td:nth-child(2)`).textContent();
         const lastName = await page.locator(`#table1 tbody tr:nth-child(${element + 1}) td:nth-child(1)`).textContent();
         console.log(`Full name of person with due: ${firstName} ${lastName}`);
+        // expect(`${firstName} ${lastName}`) contain fullnames
+        //expect(fullnames).toContain(`${firstName} ${lastName}`);
         expect(`${firstName} ${lastName}`).toBe(fullnames[index]);
 
     }

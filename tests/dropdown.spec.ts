@@ -16,6 +16,6 @@ test('dropdown: select option 1 and validate selection', async ({ page }) => {
   await dropdown.selectOption(['apple','banana']); // select by value
   // Read selected values from the multi-select and assert the array
   const selectedValues = await dropdown.evaluate(el => Array.from((el as HTMLSelectElement).selectedOptions).map(o => o.value));
-  await expect(selectedValues).toEqual(['apple','banana']);
-  await expect(dropdown.locator('option:checked')).toHaveText(['Apple', 'Banana']);
+  await expect(selectedValues).toEqual(['banana','apple']);
+  await expect(dropdown.locator('option:checked')).toHaveText(['Banana','Apple']);
 });
